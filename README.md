@@ -156,6 +156,24 @@ Terraform loads all `.tf` files in a directory automatically. The conventional l
 | `variables.tf` | Input variables |
 | `outputs.tf` | Outputs |
 
+## The State File
+
+Terraform keeps track of every resource it manages in a **state file** (`terraform.tfstate`). This is a JSON file that maps your `.tf` configuration to the real resources that exist.
+
+### Why it matters
+
+- When you run `terraform plan` or `terraform apply`, Terraform compares your config against the state file to figure out what needs to change.
+- If you delete the state file, Terraform "forgets" about the resources it created — they still exist, but Terraform can no longer manage or destroy them.
+- The state file can contain **sensitive data** (passwords, keys, resource IDs), so it should never be committed to version control. That's why it's in `.gitignore`.
+
+### Try it
+
+After running `terraform apply`, open `terraform.tfstate` in your editor and look at the JSON. You'll see each resource listed with its current attributes. Compare it to what's in your `.tf` files.
+
+### In real projects
+
+For team work, state is stored remotely (e.g. in an S3 bucket or Terraform Cloud) so that everyone shares the same view of infrastructure. Local state files are fine for learning but don't scale to collaboration.
+
 ## Cleanup
 
 ```bash
